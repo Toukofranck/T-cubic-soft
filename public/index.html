@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -24,20 +22,578 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+  <title>React App</title>
+</head>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <!-- CDN React (dev) + Babel for quick demo -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+  <style>
+    /* Theme variables for light/dark */
+    :root {
+      --accent: #0b69ff;
+      --bg: #b9bcc2;
+      --card: #d4d7df;
+      --text: #e6eef8;
+      --muted: rgba(230, 238, 248, .7);
+      --glass: rgba(255, 255, 255, 0.03);
+      --radius: 12px;
+      --shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
+      --glass-border: rgba(255, 255, 255, 0.04);
+      font-family: Inter, system-ui, Arial, sans-serif;
+    }
+
+    /* Light theme overrides */
+    .theme-light {
+      --accent: #0966FF;
+      --bg: linear-gradient(180deg, #f6f9ff 0%, #eef4ff 100%);
+      --card: #ffffff;
+      --text: #a8aaae;
+      --muted: rgba(105, 107, 110, 0.65);
+      --glass: rgba(15, 23, 36, 0.03);
+      --glass-border: rgba(15, 23, 36, 0.06);
+      --shadow: 0 10px 30px rgba(15, 23, 36, 0.08);
+    }
+
+    /* Dark theme base */
+    .theme-dark {
+      --bg: linear-gradient(180deg, #b6c5e7 0%, #313643 100%);
+      --card: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      transition: background .35s ease, color .35s ease;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 32px auto;
+      padding: 24px
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center
+    }
+
+    .logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      box-shadow: 0 6px 18px rgba(11, 105, 255, 0.18);
+    }
+
+    nav a {
+      color: var(--muted);
+      margin-left: 18px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color .18s ease, transform .18s ease;
+    }
+
+    nav a:hover {
+      color: var(--text);
+      transform: translateY(-2px)
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 10px;
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      cursor: pointer;
+      color: var(--muted)
+    }
+
+    /* Hero */
+    .hero {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      margin-top: 28px
+    }
+
+    .hero .left {
+      flex: 1
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 44px);
+      color: var(--text);
+      line-height: 1.08
+    }
+
+    p.lead {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 16px
+    }
+
+    .cta {
+      margin-top: 18px;
+      background: linear-gradient(90deg, var(--accent), #4ea0ff);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 8px 26px rgba(11, 105, 255, 0.14);
+      text-decoration: none;
+      display: inline-block;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .cta:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 34px rgba(11, 105, 255, 0.18)
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 22px
+    }
+
+    .card {
+      background: var(--card);
+      padding: 18px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(2, 6, 23, 0.45);
+      border-color: rgba(11, 105, 255, 0.08)
+    }
+
+    .services .card h3,
+    .portfolio .card h3 {
+      margin: 8px 0 6px;
+      color: var(--text)
+    }
+
+    .portfolio img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 8px
+    }
+
+    footer {
+      margin-top: 34px;
+      padding-top: 22px;
+      border-top: 1px solid var(--glass-border);
+      color: var(--muted);
+      font-size: 14px
+    }
+
+    .contact form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    input,
+    textarea {
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      background: transparent;
+      color: var(--text);
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 6px 20px rgba(11, 105, 255, 0.08)
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px
+    }
+
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      background: transparent;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform .14s ease, box-shadow .14s ease;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(2, 6, 23, 0.16)
+    }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      vertical-align: middle
+    }
+
+    /* small screen */
+    @media(max-width:920px) {
+      .hero {
+        flex-direction: column;
+        align-items: flex-start
+      }
+
+      .hero>div:last-child {
+        width: 100%
+      }
+
+      .hero-right {
+        order: -1;
+        width: 100%
+      }
+
+      .container {
+        padding: 18px
+      }
+    }
+
+    /* simple animations */
+    .fade-up {
+      animation: fadeUp .10s cubic-bezier(.2, .9, .2, 1) both
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    /* subtle floating for primary card */
+    .float {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-8px)
+      }
+
+      100% {
+        transform: translateY(0)
+      }
+    }
+
+    /* respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+
+      .fade-up,
+      .float,
+      .card {
+        animation: none;
+        transition: none
+      }
+    }
+  </style>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function ThemeToggle() {
+      const [theme, setTheme] = useState(() => {
+        try {
+          return localStorage.getItem('site-theme') || 'theme-dark';
+        } catch (e) { return 'theme-dark' }
+      });
+
+      useEffect(() => {
+        document.documentElement.classList.remove('theme-dark', 'theme-light');
+        document.documentElement.classList.add(theme);
+        try { localStorage.setItem('site-theme', theme) } catch (e) { }
+      }, [theme]);
+
+      function toggle() {
+        setTheme(prev => prev === 'theme-dark' ? 'theme-light' : 'theme-dark');
+      }
+
+      return (
+        <button className="theme-toggle" onClick={toggle} aria-label="Toggle theme">
+          {theme === 'theme-dark' ? (
+            <svg className="icon" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor" /></svg>
+          ) : (
+            <svg className="icon" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M6.76 4.84l-1.8-1.79L3.17 4.83l1.79 1.79 1.8-1.78zM1 13h3v-2H1v2zm10 9h2v-3h-2v3zm9-9h3v-2h-3v2zM17.24 19.16l1.79 1.79 1.79-1.79-1.79-1.79-1.79 1.79zM4.22 19.78l1.79-1.79-1.79-1.79L2.44 18l1.78 1.78zM12 7a5 5 0 100 10 5 5 0 000-10z" fill="currentColor" /></svg>
+          )}
+          <span style={{ fontSize: 13, color: 'var(--muted)' }}>{theme === 'theme-dark' ? 'Sombre' : 'Clair'}</span>
+        </button>
+      );
+    }
+
+    function Header() {
+      return (
+        <header className="container fade-up" role="banner">
+          <div className="brand" style={{ gap: 14 }}>
+            <div className="logo" aria-hidden>T.S</div>
+            <div>
+              <div style={{ color: 'var(--text)', fontWeight: 1000 }}>Tcubic-soft</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)' }}>Solutions & développement web</div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <nav aria-label="Main Navigation">
+              <a href="#services">Services</a>
+              <a href="#portfolio">Portfolio</a>
+              <a href="#contact">Contact</a>
+            </nav>
+            <ThemeToggle />
+          </div>
+        </header>
+      );
+    }
+
+    function Hero() {
+      return (
+        <section className="container hero" aria-labelledby="hero-title">
+          <div className="left fade-up">
+            <h1 id="hero-title">Tcubic-soft — Création de solutions technologiques innovantes</h1>
+            <p className="lead">Nous concevons et développons des applications web & mobiles sur mesure, des plateformes performantes et des outils qui transforment les idées en produits réels.</p>
+            <div style={{ display: 'flex', gap: 12, marginTop: 14 }}>
+              <a className="cta" href="#contact">Demander un devis</a>
+              <a className="social-btn" href="#portfolio" style={{ background: 'transparent' }}>Voir réalisations</a>
+            </div>
+
+            <div className="card-grid" style={{ marginTop: 22 }}>
+              <div className="card">
+                <strong>Qualité</strong>
+                <div style={{ color: 'var(--muted)', marginTop: 8 }}>Architecture propre et code maintenable</div>
+              </div>
+              <div className="card">
+                <strong>Performance</strong>
+                <div style={{ color: 'var(--muted)', marginTop: 8 }}>Solutions rapides et scalables</div>
+              </div>
+              <div className="card">
+                <strong>Accompagnement</strong>
+                <div style={{ color: 'var(--muted)', marginTop: 8 }}>Du concept au déploiement</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="hero-right fade-up" style={{ width: 360, minWidth: 240 }}>
+            <div className="card float" style={{ textAlign: 'center', background: 'linear-gradient(180deg,#071229,#071029)', border: '1px solid rgba(11,105,255,0.12)' }}>
+              <h3 style={{ marginTop: 0, color: 'var(--text)' }}>Notre approche</h3>
+              <p style={{ color: 'var(--muted)', fontSize: 14 }}>Design centré utilisateur, développement agile et déploiement sécurisé.</p>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 12 }}>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Stack:</div>
+                <div style={{ fontSize: 12, color: 'var(--text)', fontWeight: 700 }}>React • Node • Cloud</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function Services() {
+      const items = [
+        { title: 'Développement Web', desc: 'Sites vitrine, web apps, APIs REST/GraphQL' },
+        { title: 'Applications Mobiles', desc: 'iOS & Android avec React Native ou Flutter' },
+        { title: 'UI/UX Design', desc: 'Prototypes, maquettes, design system' },
+        { title: 'Intégration Cloud', desc: 'Docker, CI/CD, hébergement scalable' }
+      ];
+      return (
+        <section id="services" className="container services fade-up" aria-labelledby="services-title">
+          <h2 id="services-title" style={{ color: 'var(--text)' }}>Services</h2>
+          <div className="card-grid" style={{ marginTop: 12 }}>
+            {items.map((s, i) => (
+              <div className="card" key={i}>
+                <h3>{s.title}</h3>
+                <div style={{ color: 'var(--muted)' }}>{s.desc}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function Portfolio() {
+      const projects = [
+        { title: 'Plateforme e-commerce', img: 'https://picsum.photos/seed/ecom/600/400' },
+        { title: 'Application RH', img: 'https://picsum.photos/seed/rh/600/400' },
+        { title: 'Dashboard Analytics', img: 'https://picsum.photos/seed/analytics/600/400' },
+        { title: 'Dashboard gestion', img: 'https://picsum.photos/seed/gestion/600/400' }
+      ];
+      return (
+        <section id="portfolio" className="container portfolio fade-up" aria-labelledby="portfolio-title">
+          <h2 id="portfolio-title" style={{ color: 'var(--text)' }}>Présentation de quelque de nos réalisations  a la dimention de nos compétence  </h2>
+          <div className="card-grid" style={{ marginTop: 12 }}>
+            {projects.map((p, i) => (
+              <div className="card" key={i}>
+                <img src={p.img} alt={p.title} />
+                <h3>{p.title}</h3>
+                <div style={{ color: 'var(--muted)' }}> Annalyse,Conception, développement & déploiement</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function Contact() {
+      const [sent, setSent] = useState(false);
+      const phone = '+2376XXXXXXX'; // replace with real number
+      const email = 'tcubic-soft@gmail.com';
+      function handleSubmit(e) {
+        e.preventDefault();
+        setSent(true);
+        setTimeout(() => setSent(false), 3000);
+      }
+
+      const whatsappHref = `https://wa.me/${phone.replace(/[677872292]/g, '')}?text=${encodeURIComponent('Bonjour Tcubic-soft, je souhaite en savoir plus sur vos services.')}`;
+      const fbHref = 'https://m.me/yourpage'; // replace with actual messenger link
+      const linkedinHref = 'https://www.linkedin.com/company/your-company'; // replace with actual
+
+      return (
+        <section id="contact" className="container contact fade-up" aria-labelledby="contact-title">
+          <h2 id="contact-title" style={{ color: 'var(--text)' }}>Contact</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 18, marginTop: 12 }}>
+            <div className="card">
+              <form onSubmit={handleSubmit}>
+                <input required placeholder="Nom / Société" aria-label="Nom ou société" />
+                <input required type="email" placeholder="Email" aria-label="Email" />
+                <textarea required rows="5" placeholder="Message / Besoin" aria-label="Message"></textarea>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 6 }}>
+                  <button className="cta" type="submit">{sent ? 'Envoyé ✓' : 'Envoyer'}</button>
+                  <div style={{ color: 'var(--muted)', fontSize: 13 }}>{sent ? 'Merci, nous reviendrons vers vous.' : 'Ou contactez-nous via ces canaux'}</div>
+                </div>
+
+                <div className="contact-actions" style={{ marginTop: 12 }}>
+                  <a className="social-btn" href={whatsappHref} target="_blank" rel="noreferrer" aria-label="Contacter via WhatsApp">
+                    <svg className="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M20.5 3.5A11.9 11.9 0 0012 1C6 1 1.2 5.9 1.2 12c0 2.1.6 4.1 1.7 5.8L1 23l5.4-1.4A11.9 11.9 0 0012 23c6 0 10.8-4.9 10.8-11 0-1.7-.4-3.3-1.3-4.7zM12 21.6c-1.6 0-3.2-.4-4.6-1.2l-.3-.2-3.2.8.9-3.1-.2-.3A9.1 9.1 0 012.9 12c0-5 4.1-9.1 9.1-9.1 2.4 0 4.6.9 6.3 2.6A9 9 0 0121 12c0 5-4.1 9-9 9.1z" /><path d="M17.4 14.1c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2s-.8 1-.9 1.2c-.2.3-.4.3-.7.1-.9-.5-2.5-1.6-3.6-2.9-.3-.4.3-.4.8-1.3.1-.2 0-.5-.1-.7-.1-.2-.7-1.8-1-2.4-.3-.6-.6-.5-.8-.5-.2 0-.5 0-.8 0s-.7.1-1 .5c-.3.4-1 1.1-1 2.4 0 1.2.9 2.4 1 2.6.1.2 1.6 2.6 3.9 4.4 2.6 2 3.4 2.2 4.2 2.4.7.2 1.5.1 2.1.1.7 0 2.3-.9 2.6-1.7.3-.8.3-1.6.2-1.7-.1-.1-.6-.2-.9-.4z" /></svg>
+                    WhatsApp
+                  </a>
+
+                  <a className="social-btn" href={fbHref} target="_blank" rel="noreferrer" aria-label="Contacter via Facebook Messenger">
+                    <svg className="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M12 2C6.5 2 2 6.5 2 12c0 2.7 1.1 5.2 2.9 7l-.6 3.9 3.9-.9c1.5.6 3.1.9 4.8.9 5.5 0 10-4.5 10-10S17.5 2 12 2zm1.4 12.6l-1 2.4c-.1.4-.5.6-.9.6-.1 0-.2 0-.3-.1-.5-.2-3.2-2.2-4.6-3.6-1.2-1.2-2.1-2.7-2.1-4.5 0-3 2.4-5.4 5.4-5.4 2 0 3.5 0.9 4.2 1.7.1.1.2.2.2.4v6c0 .3-.3.5-.7.6z" /></svg>
+                    Messenger
+                  </a>
+
+                  <a className="social-btn" href={`mailto:${email}`} aria-label="Envoyer un email">
+                    <svg className="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z" /></svg>
+                    Email
+                  </a>
+
+                  <a className="social-btn" href={linkedinHref} target="_blank" rel="noreferrer" aria-label="Voir sur LinkedIn">
+                    <svg className="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.48 23.5h4v-13h-4v13zM8.98 10.5h3.77v1.76h.05c.53-1 .83-2.16.83-3.53 0-3.77-2.28-5.49-5.3-5.49-2.42 0-3.5 1.34-4.12 2.28v-1.96h-3.9v13h4v-7.27c0-1.94.36-3.82 2.76-3.82 2.37 0 2.4 2.17 2.4 3.95v7.14z" /></svg>
+                    LinkedIn
+                  </a>
+                </div>
+              </form>
+            </div>
+
+            <div className="card" style={{ background: 'linear-gradient(180deg,#071229,#071029)' }}>
+              <h3 style={{ marginTop: 0, color: 'var(--text)' }}>Tcubic-soft</h3>
+              <div style={{ color: 'var(--muted)', lineHeight: 1.5 }}>
+                Email: <a href={`mailto:${email}`} style={{ color: 'var(--accent)', textDecoration: 'none' }}>{email}</a><br />
+                Téléphone: <a href={`tel:${phone}`} style={{ color: 'var(--accent)', textDecoration: 'none' }}>{phone}</a>
+              </div>
+
+              <div style={{ marginTop: 12, color: 'var(--muted)' }}>Basée au Cameroun — Nous travaillons avec des clients internationaux.</div>
+
+              <div style={{ marginTop: 14, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <a className="social-btn" href={whatsappHref} target="_blank" rel="noreferrer" aria-label="WhatsApp rapide">WhatsApp</a>
+                <a className="social-btn" href={fbHref} target="_blank" rel="noreferrer" aria-label="Messenger rapide">Messenger</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function Footer() {
+      return (
+        <footer className="container fade-up" role="contentinfo">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+            <div>© {new Date().getFullYear()} Tcubic-soft — Tous droits réservés</div>
+            <div style={{ color: 'var(--muted)' }}>Conçu & développé par Tcubic-soft</div>
+          </div>
+        </footer>
+      );
+    }
+
+    function App() {
+      useEffect(() => {
+        // default theme if not set
+        if (!document.documentElement.classList.contains('theme-dark') && !document.documentElement.classList.contains('theme-light')) {
+          document.documentElement.classList.add(localStorage.getItem('site-theme') || 'theme-dark');
+        }
+      }, []);
+      return (
+        <div>
+          <Header />
+          <main>
+            <Hero />
+            <Services />
+            <Portfolio />
+            <Contact />
+          </main>
+          <Footer />
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+
 </html>
