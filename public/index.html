@@ -34,7 +34,7 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
-    /* Theme variables for light/dark */
+    /* Theme variables */
     :root {
       --accent: #0b69ff;
       --bg: #b9bcc2;
@@ -48,424 +48,173 @@
       font-family: Inter, system-ui, Arial, sans-serif;
     }
 
-    /* Light theme overrides */
     .theme-light {
       --accent: #0966FF;
       --bg: linear-gradient(180deg, #f6f9ff 0%, #eef4ff 100%);
       --card: #ffffff;
-      --text: #a8aaae;
-      --muted: rgba(105, 107, 110, 0.65);
+      --text: #1f2937;
+      --muted: rgba(31, 41, 55, 0.65);
       --glass: rgba(15, 23, 36, 0.03);
       --glass-border: rgba(15, 23, 36, 0.06);
       --shadow: 0 10px 30px rgba(15, 23, 36, 0.08);
     }
 
-    /* Dark theme base */
     .theme-dark {
-      --bg: linear-gradient(180deg, #b6c5e7 0%, #313643 100%);
-      --card: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+      --bg: linear-gradient(180deg, #071229 0%, #0b1220 100%);
+      --card: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      --text: #e6eef8;
+      --muted: rgba(230,238,248,0.65);
     }
 
-    html,
-    body {
-      height: 100%;
-      margin: 0
-    }
+    html, body { height: 100%; margin: 0; }
+    body { background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; transition: background .35s ease, color .35s ease; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      -webkit-font-smoothing: antialiased;
-      transition: background .35s ease, color .35s ease;
-    }
+    .container { max-width: 1100px; margin: 32px auto; padding: 24px; }
 
-    .container {
-      max-width: 1100px;
-      margin: 32px auto;
-      padding: 24px
-    }
+    header { display:flex; justify-content:space-between; align-items:center; gap:12px; position:relative; z-index:5; }
+    .brand { display:flex; gap:12px; align-items:center; }
+    .logo { width:52px; height:52px; border-radius:12px; background:var(--accent); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; box-shadow:0 6px 18px rgba(11,105,255,0.18); }
+    nav { display:flex; align-items:center; gap:8px; }
+    nav a { color:var(--muted); margin-left: 18px; text-decoration:none; font-weight:600; transition: color .18s ease, transform .18s ease; }
+    nav a:hover { color:var(--text); transform:translateY(-2px); }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px
-    }
+    /* Mobile nav toggle */
+    .nav-toggle { display:none; background:transparent; border:1px solid var(--glass-border); color:var(--muted); padding:8px; border-radius:10px; cursor:pointer; }
+    .mobile-nav { display:none; position:absolute; top:72px; right:24px; width:220px; background:var(--card); border-radius:12px; border:1px solid var(--glass-border); box-shadow: 0 12px 36px rgba(2,6,23,0.35); overflow:hidden; }
+    .mobile-nav a { display:block; padding:12px 14px; border-bottom:1px solid rgba(255,255,255,0.02); color:var(--text); }
+    .mobile-nav a:last-child { border-bottom: none; }
 
-    .brand {
-      display: flex;
-      gap: 12px;
-      align-items: center
-    }
+    .theme-toggle { display:inline-flex; align-items:center; gap:8px; padding:8px; border-radius:10px; background:transparent; border:1px solid var(--glass-border); cursor:pointer; color:var(--muted) }
 
-    .logo {
-      width: 52px;
-      height: 52px;
-      border-radius: 12px;
-      background: var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 800;
-      box-shadow: 0 6px 18px rgba(11, 105, 255, 0.18);
-    }
-
-    nav a {
-      color: var(--muted);
-      margin-left: 18px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color .18s ease, transform .18s ease;
-    }
-
-    nav a:hover {
-      color: var(--text);
-      transform: translateY(-2px)
-    }
-
-    .theme-toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px;
-      border-radius: 10px;
-      background: transparent;
-      border: 1px solid var(--glass-border);
-      cursor: pointer;
-      color: var(--muted)
-    }
-
-    /* Hero */
+    /* Hero with developer background */
     .hero {
-      display: flex;
-      gap: 32px;
-      align-items: center;
-      margin-top: 28px
+      display:flex; gap:32px; align-items:center; margin-top:28px; padding:44px; border-radius:16px;
+      background-image:
+        linear-gradient(180deg, rgba(2,8,23,0.32), rgba(2,8,23,0.28)),
+        url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=8a6b9a0f8ee9c90ae0f6b8b3e9a3a9e6');
+      background-size:cover; background-position:center; color:var(--text);
+      border:1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 18px 48px rgba(2,6,23,0.45);
     }
+    .hero .left { flex:1; max-width:720px; }
+    .hero-right { width:360px; min-width:240px; }
 
-    .hero .left {
-      flex: 1
-    }
+    h1 { margin:0; font-size:clamp(28px,4vw,44px); color:var(--text); line-height:1.08; text-shadow: 0 6px 22px rgba(2,6,23,0.45); }
+    p.lead { color:var(--muted); line-height:1.6; font-size:16px; margin-top:12px; }
 
-    h1 {
-      margin: 0;
-      font-size: clamp(28px, 4vw, 44px);
-      color: var(--text);
-      line-height: 1.08
-    }
+    .cta { margin-top:18px; background:linear-gradient(90deg, var(--accent), #4ea0ff); color:white; padding:12px 18px; border-radius:10px; border:none; cursor:pointer; font-weight:700; box-shadow:0 8px 26px rgba(11,105,255,0.14); text-decoration:none; display:inline-block; transition: transform .18s ease, box-shadow .18s ease; }
 
-    p.lead {
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 16px
-    }
+    .card-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:18px; margin-top:22px; }
+    .card { background:var(--card); padding:18px; border-radius:12px; border:1px solid var(--glass-border); box-shadow:var(--shadow); transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+    .card:hover { transform:translateY(-8px); box-shadow:0 20px 40px rgba(2,6,23,0.45); border-color: rgba(11,105,255,0.08); }
 
-    .cta {
-      margin-top: 18px;
-      background: linear-gradient(90deg, var(--accent), #4ea0ff);
-      color: white;
-      padding: 12px 18px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      font-weight: 700;
-      box-shadow: 0 8px 26px rgba(11, 105, 255, 0.14);
-      text-decoration: none;
-      display: inline-block;
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
+    /* Portfolio carousel styles */
+    .carousel { position:relative; overflow:hidden; border-radius:12px; }
+    .carousel-track { display:flex; transition: transform .6s cubic-bezier(.2,.9,.2,1); will-change: transform; }
+    .slide { min-width:100%; box-sizing:border-box; padding:18px; display:flex; gap:18px; align-items:center; }
+    .slide img { width:48%; border-radius:10px; object-fit:cover; box-shadow:0 10px 30px rgba(2,6,23,0.25); }
+    .slide .meta { width:52%; }
+    .carousel-controls { position:absolute; top:50%; left:0; right:0; display:flex; justify-content:space-between; transform:translateY(-50%); pointer-events:none; padding:0 10px; }
+    .carousel-controls button { pointer-events:all; background:rgba(2,6,23,0.45); color:white; border:none; padding:10px; border-radius:10px; cursor:pointer; }
+    .carousel-pagination { display:flex; gap:8px; justify-content:center; margin-top:12px; }
+    .dot { width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,0.2); cursor:pointer; }
+    .dot.active { background:var(--accent); box-shadow:0 6px 18px rgba(11,105,255,0.18); }
 
     /* Responsive and mobile-friendly tweaks */
     @media (max-width: 920px) {
-      .cta { padding: 12px 16px; font-size: 15px; }
-      .social-btn { padding: 10px 12px; font-size: 14px; }
-      .hero-right { width: 100%; min-width: 0; }
-      .card-grid { gap: 14px; }
+      .nav-toggle { display:inline-flex; }
+      nav { display:none; } /* hide desktop nav on small screens */
+      .mobile-nav { display:block; opacity:0; transform:translateY(-6px); transition: opacity .22s ease, transform .22s ease; box-shadow:0 10px 30px rgba(2,6,23,0.3); }
+      .mobile-nav.open { opacity:1; transform:translateY(0); }
+
+      .hero { flex-direction:column; padding:18px; }
+      .hero-right { order:-1; width:100%; }
+      .slide { flex-direction:column; }
+      .slide img, .slide .meta { width:100%; }
+      .container{ padding:18px; margin:18px auto; }
     }
 
-    /* Small phones: larger tap targets, condensed layout, readable text */
-    @media (max-width: 480px) {
-      /* Make primary CTAs full width and easy to tap */
-      .cta {
-        display: block;
-        width: 100%;
-        text-align: center;
-        padding: 14px 16px;
-        border-radius: 12px;
-        font-size: 16px;
-        box-shadow: 0 10px 30px rgba(11,105,255,0.12);
-      }
-
-      /* Social buttons grid to avoid horizontal scrolling */
-      .contact-actions, .hero .card-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-      .social-btn {
-        width: 100%;
-        justify-content: center;
-        padding: 12px;
-        font-size: 14px;
-      }
-
-      /* Typography adjustments for readability */
-      h1 { font-size: 20px; line-height: 1.15; }
-      p.lead { font-size: 15px; }
-      header .brand div { font-size: 13px; }
-      nav a { font-size: 14px; margin-left: 10px; }
-
-      /* Cards and layout */
-      .card { padding: 12px; border-radius: 10px; }
-      .portfolio img { height: 120px; object-fit: cover; max-width: 100%; }
-      .hero { gap: 14px; align-items: flex-start; padding: 0 8px; }
-      .container { margin: 18px auto; padding: 12px; }
-
-      /* Form fields easier to use on mobile */
-      input, textarea { font-size: 15px; padding: 12px; }
-
-      /* Reduce heavy shadows on small screens to improve contrast and performance */
-      .card, .logo, .cta { box-shadow: 0 8px 18px rgba(2,6,23,0.12); }
-
-      /* Subtle entrance animation tuning for mobile */
-      .fade-up { animation: slideUp .36s cubic-bezier(.2,.9,.2,1) both; }
-      .float { animation: float 5s ease-in-out infinite; }
+    @media (max-width:480px) {
+      .cta { display:block; width:100%; text-align:center; padding:14px 16px; border-radius:12px; font-size:16px; }
+      h1 { font-size:20px; }
+      .brand div { font-size:13px; }
+      .logo { width:44px; height:44px; }
+      .carousel-controls button { padding:8px; }
     }
 
-    /* lightweight slide up animation used on mobile to feel fluid */
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Keep interactions snappy on touch devices */
-    @media (hover: none) and (pointer: coarse) {
-      nav a:hover, .cta:hover, .social-btn:hover { transform: none; box-shadow: none; }
-    }
-
-    .cta:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 14px 34px rgba(11, 105, 255, 0.18)
-    }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
-      margin-top: 22px
-    }
-
-    .card {
-      background: var(--card);
-      padding: 18px;
-      border-radius: 12px;
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--shadow);
-      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(2, 6, 23, 0.45);
-      border-color: rgba(11, 105, 255, 0.08)
-    }
-
-    .services .card h3,
-    .portfolio .card h3 {
-      margin: 8px 0 6px;
-      color: var(--text)
-    }
-
-    .portfolio img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 8px
-    }
-
-    footer {
-      margin-top: 34px;
-      padding-top: 22px;
-      border-top: 1px solid var(--glass-border);
-      color: var(--muted);
-      font-size: 14px
-    }
-
-    .contact form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px
-    }
-
-    input,
-    textarea {
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid var(--glass-border);
-      background: transparent;
-      color: var(--text);
-      transition: border-color .18s ease, box-shadow .18s ease;
-    }
-
-    input:focus,
-    textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 6px 20px rgba(11, 105, 255, 0.08)
-    }
-
-    .contact-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px
-    }
-
-    .social-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid var(--glass-border);
-      background: transparent;
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 600;
-      transition: transform .14s ease, box-shadow .14s ease;
-    }
-
-    .social-btn:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(2, 6, 23, 0.16)
-    }
-
-    .icon {
-      width: 18px;
-      height: 18px;
-      display: inline-block;
-      vertical-align: middle
-    }
-
-    /* small screen */
-    @media(max-width:920px) {
-      .hero {
-        flex-direction: column;
-        align-items: flex-start
-      }
-
-      .hero>div:last-child {
-        width: 100%
-      }
-
-      .hero-right {
-        order: -1;
-        width: 100%
-      }
-
-      .container {
-        padding: 18px
-      }
-    }
-
-    /* simple animations */
-    .fade-up {
-      animation: fadeUp .10s cubic-bezier(.2, .9, .2, 1) both
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px)
-      }
-
-      to {
-        opacity: 1;
-        transform: none
-      }
-    }
-
-    /* subtle floating for primary card */
-    .float {
-      animation: float 6s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateY(0)
-      }
-
-      50% {
-        transform: translateY(-8px)
-      }
-
-      100% {
-        transform: translateY(0)
-      }
-    }
-
-    /* respect reduced motion */
+    /* transitions for accessibility */
     @media (prefers-reduced-motion: reduce) {
-
-      .fade-up,
-      .float,
-      .card {
-        animation: none;
-        transition: none
-      }
+      .carousel-track { transition: none; }
     }
   </style>
 
   <script type="text/babel">
-    const { useState, useEffect } = React;
+    const { useState, useEffect, useRef } = React;
 
     function ThemeToggle() {
       const [theme, setTheme] = useState(() => {
-        try {
-          return localStorage.getItem('site-theme') || 'theme-dark';
-        } catch (e) { return 'theme-dark' }
+        try { return localStorage.getItem('site-theme') || 'theme-dark'; } catch (e) { return 'theme-dark' }
       });
 
       useEffect(() => {
-        document.documentElement.classList.remove('theme-dark', 'theme-light');
+        document.documentElement.classList.remove('theme-dark','theme-light');
         document.documentElement.classList.add(theme);
-        try { localStorage.setItem('site-theme', theme) } catch (e) { }
+        try { localStorage.setItem('site-theme', theme) } catch (e) {}
       }, [theme]);
 
-      function toggle() {
-        setTheme(prev => prev === 'theme-dark' ? 'theme-light' : 'theme-dark');
-      }
-
       return (
-        <button className="theme-toggle" onClick={toggle} aria-label="Toggle theme">
+        <button className="theme-toggle" onClick={() => setTheme(t => t === 'theme-dark' ? 'theme-light' : 'theme-dark')} aria-label="Toggle theme">
           {theme === 'theme-dark' ? (
-            <svg className="icon" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor" /></svg>
+            <svg className="icon" viewBox="0 0 24 24" fill="none" aria-hidden width="18" height="18"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor" /></svg>
           ) : (
-            <svg className="icon" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M6.76 4.84l-1.8-1.79L3.17 4.83l1.79 1.79 1.8-1.78zM1 13h3v-2H1v2zm10 9h2v-3h-2v3zm9-9h3v-2h-3v2zM17.24 19.16l1.79 1.79 1.79-1.79-1.79-1.79-1.79 1.79zM4.22 19.78l1.79-1.79-1.79-1.79L2.44 18l1.78 1.78zM12 7a5 5 0 100 10 5 5 0 000-10z" fill="currentColor" /></svg>
+            <svg className="icon" viewBox="0 0 24 24" fill="none" aria-hidden width="18" height="18"><path d="M6.76 4.84l-1.8-1.79L3.17 4.83l1.79 1.79 1.8-1.78zM1 13h3v-2H1v2zm10 9h2v-3h-2v3zm9-9h3v-2h-3v2zM17.24 19.16l1.79 1.79 1.79-1.79-1.79-1.79-1.79 1.79zM4.22 19.78l1.79-1.79-1.79-1.79L2.44 18l1.78 1.78zM12 7a5 5 0 100 10 5 5 0 000-10z" fill="currentColor" /></svg>
           )}
-          <span style={{ fontSize: 13, color: 'var(--muted)' }}>{theme === 'theme-dark' ? 'Sombre' : 'Clair'}</span>
+          <span style={{ fontSize:13, color:'var(--muted)' }}>{theme === 'theme-dark' ? 'Sombre' : 'Clair'}</span>
         </button>
       );
     }
 
     function Header() {
+      const [open, setOpen] = useState(false);
+      useEffect(() => {
+        // close on resize to desktop
+        function onResize(){ if (window.innerWidth > 920) setOpen(false); }
+        window.addEventListener('resize', onResize);
+        return () => window.removeEventListener('resize', onResize);
+      }, []);
       return (
-        <header className="container fade-up" role="banner">
-          <div className="brand" style={{ gap: 14 }}>
+        <header className="container" role="banner">
+          <div className="brand" style={{gap:14}}>
             <div className="logo" aria-hidden>T.S</div>
             <div>
-              <div style={{ color: 'var(--text)', fontWeight: 1000 }}>Tcubic-soft</div>
-              <div style={{ fontSize: 12, color: 'var(--muted)' }}>Solutions & développement web</div>
+              <div style={{color:'var(--text)', fontWeight:1000}}>Tcubic-soft</div>
+              <div style={{fontSize:12, color:'var(--muted)'}}>Solutions & développement web</div>
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+
+          <div style={{display:'flex', alignItems:'center', gap:12}}>
             <nav aria-label="Main Navigation">
               <a href="#services">Services</a>
               <a href="#portfolio">Portfolio</a>
               <a href="#contact">Contact</a>
             </nav>
+
+            <button className="nav-toggle" aria-expanded={open} aria-controls="mobile-nav" onClick={() => setOpen(v=>!v)} aria-label="Toggle menu">
+              {/* hamburger icon */}
+              {open ? (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              )}
+            </button>
+
             <ThemeToggle />
+          </div>
+
+          <div id="mobile-nav" className={`mobile-nav ${open ? 'open': ''}`} role="menu" aria-hidden={!open} style={{right:24}}>
+            <a href="#services" role="menuitem" onClick={()=>setOpen(false)}>Services</a>
+            <a href="#portfolio" role="menuitem" onClick={()=>setOpen(false)}>Portfolio</a>
+            <a href="#contact" role="menuitem" onClick={()=>setOpen(false)}>Contact</a>
           </div>
         </header>
       );
@@ -474,37 +223,37 @@
     function Hero() {
       return (
         <section className="container hero" aria-labelledby="hero-title">
-          <div className="left fade-up">
-            <h1 id="hero-title">Tcubic-soft — Création de solutions technologiques innovantes</h1>
-            <p className="lead">Nous concevons et développons des applications web & mobiles sur mesure, des plateformes performantes et des outils qui transforment les idées en produits réels.</p>
-            <div style={{ display: 'flex', gap: 12, marginTop: 14 }}>
+          <div className="left">
+            <h1 id="hero-title">Tcubic-soft — Création de solutions technologiques modernes</h1>
+            <p className="lead">Nous concevons et développons des applications web & mobiles sur mesure, performantes et élégantes — de l'analyse au déploiement.</p>
+            <div style={{display:'flex', gap:12, marginTop:14}}>
               <a className="cta" href="#contact">Demander un devis</a>
-              <a className="social-btn" href="#portfolio" style={{ background: 'transparent' }}>Voir réalisations</a>
+              <a className="cta" href="#portfolio" style={{background:'transparent', color:'var(--text)', border:'1px solid var(--glass-border)'}}>Voir réalisations</a>
             </div>
 
-            <div className="card-grid" style={{ marginTop: 22 }}>
+            <div className="card-grid" style={{marginTop:22}}>
               <div className="card">
                 <strong>Qualité</strong>
-                <div style={{ color: 'var(--muted)', marginTop: 8 }}>Architecture propre et code maintenable</div>
+                <div style={{color:'var(--muted)', marginTop:8}}>Architecture propre et code maintenable</div>
               </div>
               <div className="card">
                 <strong>Performance</strong>
-                <div style={{ color: 'var(--muted)', marginTop: 8 }}>Solutions rapides et scalables</div>
+                <div style={{color:'var(--muted)', marginTop:8}}>Solutions rapides et scalables</div>
               </div>
               <div className="card">
                 <strong>Accompagnement</strong>
-                <div style={{ color: 'var(--muted)', marginTop: 8 }}>Du concept au déploiement</div>
+                <div style={{color:'var(--muted)', marginTop:8}}>Du concept au déploiement</div>
               </div>
             </div>
           </div>
 
-          <div className="hero-right fade-up" style={{ width: 360, minWidth: 240 }}>
-            <div className="card float" style={{ textAlign: 'center', background: 'linear-gradient(180deg,#071229,#071029)', border: '1px solid rgba(11,105,255,0.12)' }}>
-              <h3 style={{ marginTop: 0, color: 'var(--text)' }}>Notre approche</h3>
-              <p style={{ color: 'var(--muted)', fontSize: 14 }}>Design centré utilisateur, développement agile et déploiement sécurisé.</p>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 12 }}>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Stack:</div>
-                <div style={{ fontSize: 12, color: 'var(--text)', fontWeight: 700 }}>React • Node • Cloud</div>
+          <div className="hero-right">
+            <div className="card" style={{textAlign:'center', background:'linear-gradient(180deg,#071229,#071029)', border:'1px solid rgba(11,105,255,0.12)'}}>
+              <h3 style={{marginTop:0, color:'var(--text)'}}>Notre approche</h3>
+              <p style={{color:'var(--muted)', fontSize:14}}>Design centré utilisateur, développement agile et déploiement sécurisé.</p>
+              <div style={{display:'flex', justifyContent:'center', gap:8, marginTop:12}}>
+                <div style={{fontSize:12, color:'var(--muted)'}}>Stack:</div>
+                <div style={{fontSize:12, color:'var(--text)', fontWeight:700}}>React • Node • Cloud</div>
               </div>
             </div>
           </div>
@@ -520,13 +269,13 @@
         { title: 'Intégration Cloud', desc: 'Docker, CI/CD, hébergement scalable' }
       ];
       return (
-        <section id="services" className="container services fade-up" aria-labelledby="services-title">
-          <h2 id="services-title" style={{ color: 'var(--text)' }}>Services</h2>
-          <div className="card-grid" style={{ marginTop: 12 }}>
-            {items.map((s, i) => (
+        <section id="services" className="container services" aria-labelledby="services-title">
+          <h2 id="services-title" style={{color:'var(--text)'}}>Services</h2>
+          <div className="card-grid" style={{marginTop:12}}>
+            {items.map((s,i) => (
               <div className="card" key={i}>
                 <h3>{s.title}</h3>
-                <div style={{ color: 'var(--muted)' }}>{s.desc}</div>
+                <div style={{color:'var(--muted)'}}>{s.desc}</div>
               </div>
             ))}
           </div>
@@ -536,22 +285,57 @@
 
     function Portfolio() {
       const projects = [
-        { title: 'Plateforme e-commerce', img: 'https://picsum.photos/seed/ecom/600/400' },
-        { title: 'Application RH', img: 'https://picsum.photos/seed/rh/600/400' },
-        { title: 'Dashboard Analytics', img: 'https://picsum.photos/seed/analytics/600/400' },
-        { title: 'Dashboard gestion', img: 'https://picsum.photos/seed/gestion/600/400' }
+        { title: 'Plateforme e‑commerce', img: 'https://picsum.photos/seed/ecom/900/600', desc: 'Catalogue, panier et API pour croissance rapide.' },
+        { title: 'Application RH', img: 'https://picsum.photos/seed/rh/900/600', desc: 'Gestion du personnel, process et rapports.' },
+        { title: 'Dashboard Analytics', img: 'https://picsum.photos/seed/analytics/900/600', desc: 'Visualisations temps réel & alertes.' },
+        { title: 'Système de gestion', img: 'https://picsum.photos/seed/gestion/900/600', desc: 'Workflow et automatisation métier.' }
       ];
+
+      const [index, setIndex] = useState(0);
+      const trackRef = useRef(null);
+
+      useEffect(() => {
+        const id = setInterval(() => setIndex(i => (i+1) % projects.length), 5000);
+        return () => clearInterval(id);
+      }, []);
+
+      useEffect(() => {
+        if (!trackRef.current) return;
+        trackRef.current.style.transform = `translateX(-${index * 100}%)`;
+      }, [index]);
+
       return (
-        <section id="portfolio" className="container portfolio fade-up" aria-labelledby="portfolio-title">
-          <h2 id="portfolio-title" style={{ color: 'var(--text)' }}>Présentation de quelque de nos réalisations  a la dimention de nos compétence  </h2>
-          <div className="card-grid" style={{ marginTop: 12 }}>
-            {projects.map((p, i) => (
-              <div className="card" key={i}>
-                <img src={p.img} alt={p.title} />
-                <h3>{p.title}</h3>
-                <div style={{ color: 'var(--muted)' }}> Annalyse,Conception, développement & déploiement</div>
+        <section id="portfolio" className="container portfolio" aria-labelledby="portfolio-title">
+          <h2 id="portfolio-title" style={{color:'var(--text)'}}>Quelques réalisations</h2>
+
+          <div className="carousel card" style={{marginTop:12}}>
+            <div className="carousel-track" ref={trackRef} aria-live="polite">
+              {projects.map((p, i) => (
+                <div className="slide" key={i} aria-hidden={i !== index}>
+                  <img src={p.img} alt={p.title} />
+                  <div className="meta">
+                    <h3 style={{marginTop:0}}>{p.title}</h3>
+                    <p style={{color:'var(--muted)'}}>{p.desc}</p>
+                    <div style={{marginTop:12}}>
+                      <a className="cta" href="#contact">Voir le projet</a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="carousel-controls" aria-hidden="false">
+              <button onClick={() => setIndex(i => (i - 1 + projects.length) % projects.length)} aria-label="Précédent">‹</button>
+              <button onClick={() => setIndex(i => (i + 1) % projects.length)} aria-label="Suivant">›</button>
+            </div>
+
+            <div style={{padding:12, display:'flex', justifyContent:'center'}}>
+              <div className="carousel-pagination" role="tablist" aria-label="Pagination portfolio">
+                {projects.map((_, i) => (
+                  <div key={i} role="tab" tabIndex={0} aria-selected={i===index} className={`dot ${i===index ? 'active' : ''}`} onClick={() => setIndex(i)} onKeyDown={(e)=>{ if(e.key==='Enter' || e.key===' ') setIndex(i); }} />
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </section>
       );
@@ -559,68 +343,49 @@
 
     function Contact() {
       const [sent, setSent] = useState(false);
-      const phone = '+2376XXXXXXX'; // replace with real number
+      const phone = '+2376XXXXXXX';
       const email = 'tcubic-soft@gmail.com';
-      function handleSubmit(e) {
-        e.preventDefault();
-        setSent(true);
-        setTimeout(() => setSent(false), 3000);
-      }
+      function handleSubmit(e) { e.preventDefault(); setSent(true); setTimeout(()=>setSent(false), 3000); }
 
-      const whatsappHref = `https://wa.me/${phone.replace(/[677872292]/g, '')}?text=${encodeURIComponent('Bonjour Tcubic-soft, je souhaite en savoir plus sur vos services.')}`;
-      const fbHref = 'https://m.me/yourpage'; // replace with actual messenger link
-      const linkedinHref = 'https://www.linkedin.com/company/your-company'; // replace with actual
+      const whatsappHref = `https://wa.me/${phone.replace(/[^\d]/g,'')}?text=${encodeURIComponent('Bonjour Tcubic-soft, je souhaite en savoir plus sur vos services.')}`;
+      const fbHref = 'https://m.me/yourpage';
+      const linkedinHref = 'https://www.linkedin.com/company/your-company';
 
       return (
-        <section id="contact" className="container contact fade-up" aria-labelledby="contact-title">
-          <h2 id="contact-title" style={{ color: 'var(--text)' }}>Contact</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 18, marginTop: 12 }}>
+        <section id="contact" className="container contact" aria-labelledby="contact-title">
+          <h2 id="contact-title" style={{color:'var(--text)'}}>Contact</h2>
+          <div style={{display:'grid', gridTemplateColumns:'1fr 360px', gap:18, marginTop:12}}>
             <div className="card">
               <form onSubmit={handleSubmit}>
                 <input required placeholder="Nom / Société" aria-label="Nom ou société" />
                 <input required type="email" placeholder="Email" aria-label="Email" />
                 <textarea required rows="5" placeholder="Message / Besoin" aria-label="Message"></textarea>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 6 }}>
+                <div style={{display:'flex', gap:10, alignItems:'center', marginTop:6}}>
                   <button className="cta" type="submit">{sent ? 'Envoyé ✓' : 'Envoyer'}</button>
-                  <div style={{ color: 'var(--muted)', fontSize: 13 }}>{sent ? 'Merci, nous reviendrons vers vous.' : 'Ou contactez-nous via ces canaux'}</div>
+                  <div style={{color:'var(--muted)', fontSize:13}}>{sent ? 'Merci, nous reviendrons vers vous.' : 'Ou contactez-nous via ces canaux'}</div>
                 </div>
 
-                <div className="contact-actions" style={{ marginTop: 12 }}>
-                  <a className="social-btn" href={whatsappHref} target="_blank" rel="noreferrer" aria-label="Contacter via WhatsApp">
-                    <svg className="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M20.5 3.5A11.9 11.9 0 0012 1C6 1 1.2 5.9 1.2 12c0 2.1.6 4.1 1.7 5.8L1 23l5.4-1.4A11.9 11.9 0 0012 23c6 0 10.8-4.9 10.8-11 0-1.7-.4-3.3-1.3-4.7zM12 21.6c-1.6 0-3.2-.4-4.6-1.2l-.3-.2-3.2.8.9-3.1-.2-.3A9.1 9.1 0 012.9 12c0-5 4.1-9.1 9.1-9.1 2.4 0 4.6.9 6.3 2.6A9 9 0 0121 12c0 5-4.1 9-9 9.1z" /><path d="M17.4 14.1c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2s-.8 1-.9 1.2c-.2.3-.4.3-.7.1-.9-.5-2.5-1.6-3.6-2.9-.3-.4.3-.4.8-1.3.1-.2 0-.5-.1-.7-.1-.2-.7-1.8-1-2.4-.3-.6-.6-.5-.8-.5-.2 0-.5 0-.8 0s-.7.1-1 .5c-.3.4-1 1.1-1 2.4 0 1.2.9 2.4 1 2.6.1.2 1.6 2.6 3.9 4.4 2.6 2 3.4 2.2 4.2 2.4.7.2 1.5.1 2.1.1.7 0 2.3-.9 2.6-1.7.3-.8.3-1.6.2-1.7-.1-.1-.6-.2-.9-.4z" /></svg>
-                    WhatsApp
-                  </a>
-
-                  <a className="social-btn" href={fbHref} target="_blank" rel="noreferrer" aria-label="Contacter via Facebook Messenger">
-                    <svg className="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M12 2C6.5 2 2 6.5 2 12c0 2.7 1.1 5.2 2.9 7l-.6 3.9 3.9-.9c1.5.6 3.1.9 4.8.9 5.5 0 10-4.5 10-10S17.5 2 12 2zm1.4 12.6l-1 2.4c-.1.4-.5.6-.9.6-.1 0-.2 0-.3-.1-.5-.2-3.2-2.2-4.6-3.6-1.2-1.2-2.1-2.7-2.1-4.5 0-3 2.4-5.4 5.4-5.4 2 0 3.5 0.9 4.2 1.7.1.1.2.2.2.4v6c0 .3-.3.5-.7.6z" /></svg>
-                    Messenger
-                  </a>
-
-                  <a className="social-btn" href={`mailto:${email}`} aria-label="Envoyer un email">
-                    <svg className="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z" /></svg>
-                    Email
-                  </a>
-
-                  <a className="social-btn" href={linkedinHref} target="_blank" rel="noreferrer" aria-label="Voir sur LinkedIn">
-                    <svg className="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.48 23.5h4v-13h-4v13zM8.98 10.5h3.77v1.76h.05c.53-1 .83-2.16.83-3.53 0-3.77-2.28-5.49-5.3-5.49-2.42 0-3.5 1.34-4.12 2.28v-1.96h-3.9v13h4v-7.27c0-1.94.36-3.82 2.76-3.82 2.37 0 2.4 2.17 2.4 3.95v7.14z" /></svg>
-                    LinkedIn
-                  </a>
+                <div className="card contact-actions" style={{marginTop:12, display:'flex', flexWrap:'wrap', gap:10}}>
+                  <a className="social-btn" href={whatsappHref} target="_blank" rel="noreferrer" aria-label="Contacter via WhatsApp">WhatsApp</a>
+                  <a className="social-btn" href={fbHref} target="_blank" rel="noreferrer" aria-label="Contacter via Facebook Messenger">Messenger</a>
+                  <a className="social-btn" href={`mailto:${email}`} aria-label="Envoyer un email">Email</a>
+                  <a className="social-btn" href={linkedinHref} target="_blank" rel="noreferrer" aria-label="Voir sur LinkedIn">LinkedIn</a>
                 </div>
               </form>
             </div>
 
-            <div className="card" style={{ background: 'linear-gradient(180deg,#071229,#071029)' }}>
-              <h3 style={{ marginTop: 0, color: 'var(--text)' }}>Tcubic-soft</h3>
-              <div style={{ color: 'var(--muted)', lineHeight: 1.5 }}>
-                Email: <a href={`mailto:${email}`} style={{ color: 'var(--accent)', textDecoration: 'none' }}>{email}</a><br />
-                Téléphone: <a href={`tel:${phone}`} style={{ color: 'var(--accent)', textDecoration: 'none' }}>{phone}</a>
+            <div className="card" style={{background:'linear-gradient(180deg,#071229,#071029)'}}>
+              <h3 style={{marginTop:0, color:'var(--text)'}}>Tcubic-soft</h3>
+              <div style={{color:'var(--muted)', lineHeight:1.5}}>
+                Email: <a href={`mailto:${email}`} style={{color:'var(--accent)', textDecoration:'none'}}>{email}</a><br/>
+                Téléphone: <a href={`tel:${phone}`} style={{color:'var(--accent)', textDecoration:'none'}}>{phone}</a>
               </div>
 
-              <div style={{ marginTop: 12, color: 'var(--muted)' }}>Basée au Cameroun — Nous travaillons avec des clients internationaux.</div>
+              <div style={{marginTop:12, color:'var(--muted)'}}>Basée au Cameroun — Nous travaillons avec des clients internationaux.</div>
 
-              <div style={{ marginTop: 14, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <a className="social-btn" href={whatsappHref} target="_blank" rel="noreferrer" aria-label="WhatsApp rapide">WhatsApp</a>
-                <a className="social-btn" href={fbHref} target="_blank" rel="noreferrer" aria-label="Messenger rapide">Messenger</a>
+              <div style={{marginTop:14, display:'flex', gap:8, flexWrap:'wrap'}}>
+                <a className="social-btn" href={whatsappHref} target="_blank" rel="noreferrer">WhatsApp</a>
+                <a className="social-btn" href={fbHref} target="_blank" rel="noreferrer">Messenger</a>
               </div>
             </div>
           </div>
@@ -630,10 +395,10 @@
 
     function Footer() {
       return (
-        <footer className="container fade-up" role="contentinfo">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+        <footer className="container" role="contentinfo" style={{marginTop:34, paddingTop:22, borderTop:'1px solid rgba(255,255,255,0.03)', color:'var(--muted)', fontSize:14}}>
+          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12}}>
             <div>© {new Date().getFullYear()} Tcubic-soft — Tous droits réservés</div>
-            <div style={{ color: 'var(--muted)' }}>Conçu & développé par Tcubic-soft</div>
+            <div style={{color:'var(--muted)'}}>Conçu & développé par Tcubic-soft</div>
           </div>
         </footer>
       );
@@ -641,11 +406,11 @@
 
     function App() {
       useEffect(() => {
-        // default theme if not set
         if (!document.documentElement.classList.contains('theme-dark') && !document.documentElement.classList.contains('theme-light')) {
           document.documentElement.classList.add(localStorage.getItem('site-theme') || 'theme-dark');
         }
       }, []);
+
       return (
         <div>
           <Header />
