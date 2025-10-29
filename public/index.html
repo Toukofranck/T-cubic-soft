@@ -176,6 +176,74 @@
       transition: transform .18s ease, box-shadow .18s ease;
     }
 
+    /* Responsive and mobile-friendly tweaks */
+    @media (max-width: 920px) {
+      .cta { padding: 12px 16px; font-size: 15px; }
+      .social-btn { padding: 10px 12px; font-size: 14px; }
+      .hero-right { width: 100%; min-width: 0; }
+      .card-grid { gap: 14px; }
+    }
+
+    /* Small phones: larger tap targets, condensed layout, readable text */
+    @media (max-width: 480px) {
+      /* Make primary CTAs full width and easy to tap */
+      .cta {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 14px 16px;
+        border-radius: 12px;
+        font-size: 16px;
+        box-shadow: 0 10px 30px rgba(11,105,255,0.12);
+      }
+
+      /* Social buttons grid to avoid horizontal scrolling */
+      .contact-actions, .hero .card-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .social-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px;
+        font-size: 14px;
+      }
+
+      /* Typography adjustments for readability */
+      h1 { font-size: 20px; line-height: 1.15; }
+      p.lead { font-size: 15px; }
+      header .brand div { font-size: 13px; }
+      nav a { font-size: 14px; margin-left: 10px; }
+
+      /* Cards and layout */
+      .card { padding: 12px; border-radius: 10px; }
+      .portfolio img { height: 120px; object-fit: cover; max-width: 100%; }
+      .hero { gap: 14px; align-items: flex-start; padding: 0 8px; }
+      .container { margin: 18px auto; padding: 12px; }
+
+      /* Form fields easier to use on mobile */
+      input, textarea { font-size: 15px; padding: 12px; }
+
+      /* Reduce heavy shadows on small screens to improve contrast and performance */
+      .card, .logo, .cta { box-shadow: 0 8px 18px rgba(2,6,23,0.12); }
+
+      /* Subtle entrance animation tuning for mobile */
+      .fade-up { animation: slideUp .36s cubic-bezier(.2,.9,.2,1) both; }
+      .float { animation: float 5s ease-in-out infinite; }
+    }
+
+    /* lightweight slide up animation used on mobile to feel fluid */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Keep interactions snappy on touch devices */
+    @media (hover: none) and (pointer: coarse) {
+      nav a:hover, .cta:hover, .social-btn:hover { transform: none; box-shadow: none; }
+    }
+
     .cta:hover {
       transform: translateY(-4px);
       box-shadow: 0 14px 34px rgba(11, 105, 255, 0.18)
